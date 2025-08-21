@@ -13,6 +13,7 @@ def extract_sections(doc, keywords):
     for para in doc.paragraphs:
         text = para.text.strip()  # Удаляем пробелы
 
+
         # Проверяем начало и конец каждого раздела по ключевым словам
         for keyword in keywords:
             if keyword in text and not text.endswith("конец"):
