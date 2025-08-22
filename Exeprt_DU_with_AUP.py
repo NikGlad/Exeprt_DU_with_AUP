@@ -13,7 +13,6 @@ def extract_sections(doc, keywords):
     for para in doc.paragraphs:
         text = para.text.strip()  # Удаляем пробелы
 
-
         # Проверяем начало и конец каждого раздела по ключевым словам
         for keyword in keywords:
             if keyword in text and not text.endswith("конец"):
@@ -37,7 +36,6 @@ def generate_doc():
     try:
         src_doc = Document("исходный.docx")  # Загружаем исходный документ
         dst_doc = Document()                 # Создаем новый пустой документ
-
 
         # ПРАВИТЬ
         selected_keywords = []              # Список выбранных разделов
@@ -88,7 +86,6 @@ def generate_doc():
         if var_d3.get():
             selected_keywords.append("d3")
         if not selected_keywords:
-
 
             # Если ничего не выбрано — предупреждение
             messagebox.showwarning("Внимание", "Выберите хотя бы один раздел.")
@@ -141,6 +138,22 @@ canvas.configure(yscrollcommand=scrollbar.set)
 
 canvas.pack(side="left", fill="both", expand=True)  # Размещение канваса
 scrollbar.pack(side="right", fill="y")              # Размещение ползунка
+
+# === Поддержка прокрутки колесиком ===
+def _on_mouse_wheel(event):
+    # Для Windows и Mac
+    canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+def _on_mouse_wheel_linux(event):
+    if event.num == 4:
+        canvas.yview_scroll(-1, "units")
+    elif event.num == 5:
+        canvas.yview_scroll(1, "units")
+
+canvas.bind_all("<MouseWheel>", _on_mouse_wheel)      # Windows, Mac
+canvas.bind_all("<Button-4>", _on_mouse_wheel_linux)  # Linux (scroll up)
+canvas.bind_all("<Button-5>", _on_mouse_wheel_linux)  # Linux (scroll down)
+# === конец добавки ===
 
 # ПРАВИТЬ
 # Переменные для чекбоксов
